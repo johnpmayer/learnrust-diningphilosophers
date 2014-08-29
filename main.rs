@@ -5,10 +5,11 @@ use std::sync::Mutex;
 use std::time::Duration;
 
 static N : uint = 5;
+static DEADLOCK : bool = true;
 
 fn philosopher(seat : uint, vec : &[Mutex<uint>]) {
-    let leftFork = if seat != 0 { seat } else { (seat + 1) % N };
-    let rightFork = if seat != 0 { (seat + 1) % N } else { seat };
+    let leftFork = if DEADLOCK || seat != 0 { seat } else { (seat + 1) % N };
+    let rightFork = if DEADLOCK || seat != 0 { (seat + 1) % N } else { seat };
     println!("Philosopher {} {} {}", seat, leftFork, rightFork);
     let ref left = vec[leftFork];
     let ref right = vec[rightFork];
